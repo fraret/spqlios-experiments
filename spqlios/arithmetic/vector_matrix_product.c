@@ -212,6 +212,16 @@ EXPORT void vmp_apply_dft_to_dft(const MODULE* module,                       // 
   module->func.vmp_apply_dft_to_dft(module, res, res_size, a_dft, a_size, pmat, nrows, ncols, tmp_space);
 }
 
+EXPORT void vmp_apply_prepared_to_dft(const MODULE* module,                       // N
+                                      VEC_ZNX_DFT* res, const uint64_t res_size,  // res
+                                      const VEC_ZNX_DFT* a_dft, uint64_t a_size,  // a
+                                      const VMP_PMAT* pmat, const uint64_t nrows,
+                                      const uint64_t ncols,  // prep matrix
+                                      uint8_t* tmp_space     // scratch space (a_size*sizeof(reim4) bytes)
+) {
+  module->func.vmp_apply_prepared_to_dft(module, res, res_size, a_dft, a_size, pmat, nrows, ncols, tmp_space);
+}
+
 EXPORT uint64_t vmp_apply_dft_to_dft_tmp_bytes(const MODULE* module,           // N
                                                uint64_t res_size,              // res
                                                uint64_t a_size,                // a

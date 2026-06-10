@@ -69,6 +69,7 @@ static void fill_fft64_virtual_table(MODULE* module) {
     module->func.vmp_prepare_contiguous = fft64_vmp_prepare_contiguous_avx;
     module->func.vmp_apply_dft = fft64_vmp_apply_dft_avx;
     module->func.vmp_apply_dft_to_dft = fft64_vmp_apply_dft_to_dft_avx;
+    module->func.vmp_apply_prepared_to_dft = fft64_vmp_apply_prepared_to_dft_avx;
   }
 }
 
