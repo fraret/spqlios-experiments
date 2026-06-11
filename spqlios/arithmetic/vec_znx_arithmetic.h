@@ -152,6 +152,13 @@ EXPORT void vmp_prepare_contiguous(const MODULE* module,                        
                                    uint8_t* tmp_space                                   // scratch space
 );
 
+/** @brief prepares a vmp vector */
+EXPORT void vmp_prepare_contiguous_vec(const MODULE* module,                              // N
+                                       VMP_PVEC* pvec, uint64_t nrows,                    // output
+                                       const int64_t* a, uint64_t a_size, uint64_t a_sl,  // a
+                                       uint8_t* tmp_space                                 // scratch space
+);
+
 /** @brief prepares a vmp matrix (mat[row*ncols+col] points to the item) */
 EXPORT void vmp_prepare_dblptr(const MODULE* module,                                 // N
                                VMP_PMAT* pmat,                                       // output
@@ -324,6 +331,10 @@ EXPORT void vmp_prepare_contiguous(const MODULE* module,                        
 /** @brief minimal scratch space byte-size required for the vmp_prepare function */
 EXPORT uint64_t vmp_prepare_contiguous_tmp_bytes(const MODULE* module,  // N
                                                  uint64_t nrows, uint64_t ncols);
+
+/** @brief minimal scratch space byte-size required for the vmp_prepare_vec function */
+EXPORT uint64_t vmp_prepare_contiguous_vec_tmp_bytes(const MODULE* module,  // N
+                                                     uint64_t nrows, uint64_t a_size);
 
 /** @brief applies a vmp product (result in DFT space) */
 EXPORT void vmp_apply_dft(const MODULE* module,                                  // N

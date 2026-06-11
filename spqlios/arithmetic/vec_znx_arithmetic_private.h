@@ -84,7 +84,9 @@ typedef typeof(svp_apply_dft) SVP_APPLY_DFT_F;
 typedef typeof(znx_small_single_product) ZNX_SMALL_SINGLE_PRODUCT_F;
 typedef typeof(znx_small_single_product_tmp_bytes) ZNX_SMALL_SINGLE_PRODUCT_TMP_BYTES_F;
 typedef typeof(vmp_prepare_contiguous) VMP_PREPARE_CONTIGUOUS_F;
+typedef typeof(vmp_prepare_contiguous_vec) VMP_PREPARE_CONTIGUOUS_VEC_F;
 typedef typeof(vmp_prepare_contiguous_tmp_bytes) VMP_PREPARE_CONTIGUOUS_TMP_BYTES_F;
+typedef typeof(vmp_prepare_contiguous_vec_tmp_bytes) VMP_PREPARE_CONTIGUOUS_VEC_TMP_BYTES_F;
 typedef typeof(cnv_apply_dft) CNV_APPLY_DFT_F;
 typedef typeof(cnv_apply_dft_tmp_bytes) CNV_APPLY_DFT_TMP_BYTES_F;
 typedef typeof(cnv_prepare_left_contiguous) CNV_PREPARE_LEFT_CONTIGUOUS_F;
@@ -135,7 +137,9 @@ struct module_virtual_functions_t {
   ZNX_SMALL_SINGLE_PRODUCT_F* znx_small_single_product;
   ZNX_SMALL_SINGLE_PRODUCT_TMP_BYTES_F* znx_small_single_product_tmp_bytes;
   VMP_PREPARE_CONTIGUOUS_F* vmp_prepare_contiguous;
+  VMP_PREPARE_CONTIGUOUS_VEC_F* vmp_prepare_contiguous_vec;
   VMP_PREPARE_CONTIGUOUS_TMP_BYTES_F* vmp_prepare_contiguous_tmp_bytes;
+  VMP_PREPARE_CONTIGUOUS_VEC_TMP_BYTES_F* vmp_prepare_contiguous_vec_tmp_bytes;
   VMP_APPLY_DFT_F* vmp_apply_dft;
   VMP_APPLY_DFT_TMP_BYTES_F* vmp_apply_dft_tmp_bytes;
   VMP_APPLY_DFT_TO_DFT_F* vmp_apply_dft_to_dft;
@@ -495,6 +499,15 @@ EXPORT void fft64_vmp_prepare_contiguous_avx(const MODULE* module,              
 /** @brief minimal scratch space byte-size required for the vmp_prepare function */
 EXPORT uint64_t fft64_vmp_prepare_contiguous_tmp_bytes(const MODULE* module,  // N
                                                        uint64_t nrows, uint64_t ncols);
+
+EXPORT uint64_t fft64_vmp_prepare_contiguous_vec_tmp_bytes(const MODULE* module,  // N
+                                                           uint64_t nrows, uint64_t a_size);
+
+EXPORT void fft64_vmp_prepare_contiguous_vec_ref(const MODULE* module,                              // N
+                                                 VMP_PVEC* pvec, uint64_t nrows,                    // output
+                                                 const int64_t* a, uint64_t a_size, uint64_t a_sl,  // a
+                                                 uint8_t* tmp_space                                 // scratch space
+);
 
 /** @brief applies a vmp product (result in DFT space) */
 EXPORT void fft64_vmp_apply_dft_ref(const MODULE* module,                                  // N

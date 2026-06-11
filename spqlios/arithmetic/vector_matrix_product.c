@@ -34,10 +34,25 @@ EXPORT void vmp_prepare_contiguous(const MODULE* module,                        
   module->func.vmp_prepare_contiguous(module, pmat, mat, nrows, ncols, tmp_space);
 }
 
+/** @brief prepares a vmp vector */
+EXPORT void vmp_prepare_contiguous_vec(const MODULE* module,                              // N
+                                       VMP_PVEC* pvec, uint64_t nrows,                    // output
+                                       const int64_t* a, uint64_t a_size, uint64_t a_sl,  // a
+                                       uint8_t* tmp_space                                 // scratch space
+) {
+  module->func.vmp_prepare_contiguous_vec(module, pvec, nrows, a, a_size, a_sl, tmp_space);
+}
+
 /** @brief minimal scratch space byte-size required for the vmp_prepare function */
 EXPORT uint64_t vmp_prepare_contiguous_tmp_bytes(const MODULE* module,  // N
                                                  uint64_t nrows, uint64_t ncols) {
   return module->func.vmp_prepare_contiguous_tmp_bytes(module, nrows, ncols);
+}
+
+/** @brief minimal scratch space byte-size required for the vmp_prepare_vec function */
+EXPORT uint64_t vmp_prepare_contiguous_vec_tmp_bytes(const MODULE* module,  // N
+                                                     uint64_t nrows, uint64_t a_size) {
+  return module->func.vmp_prepare_contiguous_vec_tmp_bytes(module, nrows, a_size);
 }
 
 /** @brief prepares a vmp matrix (contiguous row-major version) */
@@ -93,6 +108,21 @@ EXPORT uint64_t fft64_vmp_prepare_contiguous_tmp_bytes(const MODULE* module,  //
                                                        uint64_t nrows, uint64_t ncols) {
   const uint64_t nn = module->nn;
   return nn * sizeof(int64_t);
+}
+
+EXPORT uint64_t fft64_vmp_prepare_contiguous_vec_tmp_bytes(const MODULE* module,  // N
+                                                           uint64_t nrows, uint64_t a_size) {
+  // Same format than right/left convolution
+  return fft64_convolution_prepare_right_contiguous_tmp_bytes(module, nrows, a_size);
+}
+
+EXPORT void fft64_vmp_prepare_contiguous_vec_ref(const MODULE* module,                              // N
+                                                 VMP_PVEC* pvec, uint64_t nrows,                    // output
+                                                 const int64_t* a, uint64_t a_size, uint64_t a_sl,  // a
+                                                 uint8_t* tmp_space                                 // scratch space
+) {
+  // Same data format than a fft64 prepared convolution
+  fft64_convolution_prepare_contiguous_ref(module, (double*)pvec, nrows, a, a_size, a_sl, tmp_space);
 }
 
 /** @brief applies a vmp product (result in DFT space) */
