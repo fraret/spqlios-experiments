@@ -25,6 +25,8 @@ typedef struct module_info_t MODULE;
 typedef struct vmp_pmat_t VMP_PMAT;
 /** @brief opaque type that represents a vector of znx in DFT space */
 typedef struct vec_znx_dft_t VEC_ZNX_DFT;
+/** @brief opaque type that represents a vector of znx in prepared for vmp DFT space */
+typedef struct vec_znx_dft_t VMP_PVEC;
 /** @brief opaque type that represents a vector of znx in large coeffs space */
 typedef struct vec_znx_bigcoeff_t VEC_ZNX_BIG;
 /** @brief opaque type that represents a prepared scalar vector product */
@@ -360,6 +362,12 @@ EXPORT uint64_t vmp_apply_dft_to_dft_tmp_bytes(const MODULE* module,           /
                                                uint64_t res_size,              // res
                                                uint64_t a_size,                // a
                                                uint64_t nrows, uint64_t ncols  // prep matrix
+);
+
+EXPORT uint64_t vmp_apply_prepared_to_dft_tmp_bytes(const MODULE* module,           // N
+                                                    uint64_t res_size,              // res
+                                                    uint64_t a_size,                // a
+                                                    uint64_t nrows, uint64_t ncols  // prep matrix
 );
 
 /** @brief prepares the right vector for convolution  */

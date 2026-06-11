@@ -138,7 +138,7 @@ EXPORT void fft64_vmp_apply_dft_to_dft_avx(const MODULE* module,                
 
 EXPORT void fft64_vmp_apply_prepared_to_dft_avx(const MODULE* module,                       // N
                                                 VEC_ZNX_DFT* res, const uint64_t res_size,  // res
-                                                const VEC_ZNX_DFT* a_dft, uint64_t a_size,  // a
+                                                const VMP_PVEC* a_prep, uint64_t a_size,    // a
                                                 const VMP_PMAT* pmat, const uint64_t nrows,
                                                 const uint64_t ncols,  // prep matrix
                                                 uint8_t* tmp_space     // scratch space (a_size*sizeof(reim4) bytes)
@@ -146,11 +146,10 @@ EXPORT void fft64_vmp_apply_prepared_to_dft_avx(const MODULE* module,           
   const uint64_t m = module->m;
   const uint64_t nn = module->nn;
 
-  double* mat2cols_output = (double*)tmp_space;     // 128 bytes
-  double* extracted_blk = (double*)tmp_space + 16;  // 64*min(nrows,a_size) bytes
+  double* mat2cols_output = (double*)tmp_space;  // 128 bytes
 
   double* mat_input = (double*)pmat;
-  double* vec_input = (double*)a_dft;
+  double* vec_input = (double*)a_prep;
   double* vec_output = (double*)res;
 
   const uint64_t row_max = nrows < a_size ? nrows : a_size;
@@ -161,7 +160,7 @@ EXPORT void fft64_vmp_apply_prepared_to_dft_avx(const MODULE* module,           
       double* mat_blk_start = mat_input + blk_i * (8 * nrows * ncols);
 
       // reim4_extract_1blk_from_contiguous_reim_avx(m, row_max, blk_i, (double*)extracted_blk, (double*)a_dft);
-      extracted_blk = (double*)a_dft + 4l * 2 * row_max * blk_i;
+      double* extracted_blk = (double*)a_prep + 4l * 2 * row_max * blk_i;
       // apply mat2cols
       for (uint64_t col_i = 0; col_i < col_max - 1; col_i += 2) {
         uint64_t col_offset = col_i * (8 * nrows);

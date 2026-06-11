@@ -96,6 +96,7 @@ typedef typeof(vmp_apply_dft_tmp_bytes) VMP_APPLY_DFT_TMP_BYTES_F;
 typedef typeof(vmp_apply_dft_to_dft) VMP_APPLY_DFT_TO_DFT_F;
 typedef typeof(vmp_apply_prepared_to_dft) VMP_APPLY_PREPARED_TO_DFT_F;
 typedef typeof(vmp_apply_dft_to_dft_tmp_bytes) VMP_APPLY_DFT_TO_DFT_TMP_BYTES_F;
+typedef typeof(vmp_apply_prepared_to_dft_tmp_bytes) VMP_APPLY_PREPARED_TO_DFT_TMP_BYTES_F;
 typedef typeof(bytes_of_vec_znx_dft) BYTES_OF_VEC_ZNX_DFT_F;
 typedef typeof(bytes_of_vec_znx_big) BYTES_OF_VEC_ZNX_BIG_F;
 typedef typeof(bytes_of_svp_ppol) BYTES_OF_SVP_PPOL_F;
@@ -140,6 +141,7 @@ struct module_virtual_functions_t {
   VMP_APPLY_DFT_TO_DFT_F* vmp_apply_dft_to_dft;
   VMP_APPLY_PREPARED_TO_DFT_F* vmp_apply_prepared_to_dft;
   VMP_APPLY_DFT_TO_DFT_TMP_BYTES_F* vmp_apply_dft_to_dft_tmp_bytes;
+  VMP_APPLY_PREPARED_TO_DFT_TMP_BYTES_F* vmp_apply_prepared_to_dft_tmp_bytes;
   CNV_APPLY_DFT_F* cnv_apply_dft;
   CNV_APPLY_DFT_TMP_BYTES_F* cnv_apply_dft_tmp_bytes;
   CNV_PREPARE_LEFT_CONTIGUOUS_F* cnv_prepare_left_contiguous;
@@ -528,6 +530,14 @@ EXPORT void fft64_vmp_apply_dft_to_dft_avx(const MODULE* module,                
                                            uint8_t* tmp_space     // scratch space (a_size*sizeof(reim4) bytes)
 );
 
+EXPORT void fft64_vmp_apply_prepared_to_dft_ref(const MODULE* module,                       // N
+                                                VEC_ZNX_DFT* res, const uint64_t res_size,  // res
+                                                const VMP_PVEC* a_prep, uint64_t a_size,    // a
+                                                const VMP_PMAT* pmat, const uint64_t nrows,
+                                                const uint64_t ncols,  // prep matrix
+                                                uint8_t* tmp_space     // scratch space (a_size*sizeof(reim4) bytes)
+);
+
 EXPORT void fft64_vmp_apply_prepared_to_dft_avx(const MODULE* module,                       // N
                                                 VEC_ZNX_DFT* res, const uint64_t res_size,  // res
                                                 const VEC_ZNX_DFT* a_dft, uint64_t a_size,  // a
@@ -548,5 +558,11 @@ EXPORT uint64_t fft64_vmp_apply_dft_to_dft_tmp_bytes(const MODULE* module,      
                                                      uint64_t res_size,              // res
                                                      uint64_t a_size,                // a
                                                      uint64_t nrows, uint64_t ncols  // prep matrix
+);
+
+EXPORT uint64_t fft64_vmp_apply_prepared_to_dft_tmp_bytes(const MODULE* module,           // N
+                                                          uint64_t res_size,              // res
+                                                          uint64_t a_size,                // a
+                                                          uint64_t nrows, uint64_t ncols  // prep matrix
 );
 #endif  // SPQLIOS_VEC_ZNX_ARITHMETIC_PRIVATE_H
