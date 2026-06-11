@@ -159,8 +159,7 @@ EXPORT void fft64_vmp_apply_prepared_to_dft_avx(const MODULE* module,           
     for (uint64_t blk_i = 0; blk_i < m / 4; blk_i++) {
       double* mat_blk_start = mat_input + blk_i * (8 * nrows * ncols);
 
-      // reim4_extract_1blk_from_contiguous_reim_avx(m, row_max, blk_i, (double*)extracted_blk, (double*)a_dft);
-      double* extracted_blk = (double*)a_prep + 4l * 2 * row_max * blk_i;
+      double* extracted_blk = (double*)a_prep + 4l * 2 * a_size * blk_i;
       // apply mat2cols
       for (uint64_t col_i = 0; col_i < col_max - 1; col_i += 2) {
         uint64_t col_offset = col_i * (8 * nrows);
